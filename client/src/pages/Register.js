@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
-import Navbar from "../components/Navbar"; // Import your existing Navbar
+import Navbar from "../components/Navbar";
 
 const Register = () => {
   const [user, setUser] = useState({
@@ -11,22 +11,48 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  const navigate = useNavigate(); // For redirection
+
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (user.password !== user.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    console.log("User registered:", user);
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: user.name,
+          email: user.email,
+          password: user.password,
+        }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        navigate('/dashboard'); // Redirect to Dashboard
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Something went wrong");
+    }
   };
-
+  
   return (
     <>
-      <Navbar /> {/* Navbar on top */}
+      <Navbar />
       <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
         <div className="card shadow-lg p-4 rounded" style={{ width: "400px" }}>
           <h2 className="text-center mb-3">Create Account</h2>

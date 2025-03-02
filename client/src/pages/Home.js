@@ -1,9 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import { FaTasks, FaUsers, FaBell } from 'react-icons/fa';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem('token'); // Check if user is logged in
+
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login'); // Redirect to login if not authenticated
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -14,9 +25,9 @@ const Home = () => {
           <p className="lead">
             Collaborate seamlessly, manage projects, and boost productivity.
           </p>
-          <Link to="/dashboard" className="btn btn-primary btn-lg shadow">
+          <button onClick={handleGetStarted} className="btn btn-primary btn-lg shadow">
             Get Started 🚀
-          </Link>
+          </button>
         </div>
 
         {/* Features Section */}
@@ -58,7 +69,7 @@ const Home = () => {
           {`
           /* Ensure page content does not overlap with navbar */
           .container {
-            margin-top: 90px; /* Adjusted margin for navbar height */
+            margin-top: 90px;
           }
 
           /* Hero Section */
@@ -71,7 +82,7 @@ const Home = () => {
           }
 
           .text-lightblue {
-            color: #99ccff; /* A lighter shade of blue */
+            color: #99ccff;
             font-weight: bold;
           }
 
