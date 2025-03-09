@@ -6,6 +6,7 @@ require("dotenv").config();
 const authRoutes = require("./routes/authRoutes");
 const projectRoutes = require('./routes/projectRoutes');
 const taskRoutes = require('./routes/taskRoutes');
+const individualTaskRoutes = require("./routes/individualTaskRoutes");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use('/api/projects', projectRoutes);  // ✅ Fixed route path
 app.use('/api/tasks', taskRoutes);        // ✅ Consistent API path
+app.use("/api/user-tasks", individualTaskRoutes);
 
 // Connect to MongoDB
 mongoose
